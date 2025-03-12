@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand">Admin Dashboard</a>
+            <a href="logout" class="btn btn-danger">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Manage Organ Donations</h2>
+
+        <!-- Donor Table -->
+        <h3 class="mt-4">Donor List</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Donor ID</th>
+                    <th>Organ Donated</th>
+                    <th>Reason</th>
+                    <th>Organization ID</th>
+                    <th>User ID</th>
+                </tr>
+            </thead>
+            <tbody id="donor-list"></tbody>
+        </table>
+
+        <!-- Patient Table -->
+        <h3 class="mt-4">Patient List</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Organ Required</th>
+                    <th>Reason</th>
+                    <th>Doctor ID</th>
+                    <th>User ID</th>
+                </tr>
+            </thead>
+            <tbody id="patient-list"></tbody>
+        </table>
+
+        <!-- Transactions Table -->
+        <h3 class="mt-4">Transaction History</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Organ ID</th>
+                    <th>Donor ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="transaction-list"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Fetch Donors
+        fetch('/donors')
+            .then(response => response.json())
+            .then(data => {
+                const donorList = document.getElementById('donor-list');
+                data.forEach(donor => {
+                    donorList.innerHTML += `<tr>
+                        <td>${donor.Donor_ID}</td>
+                        <td>${donor.organ_donated}</td>
+                        <td>${donor.reason_of_donation}</td>
+                        <td>${donor.Organization_ID}</td>
+                        <td>${donor.User_ID}</td>
+                    </tr>`;
+                });
+            });
+
+        // Fetch Patients
+        fetch('/patients')
+            .then(response => response.json())
+            .then(data => {
+                const patientList = document.getElementById('patient-list');
+                data.forEach(patient => {
+                    patientList.innerHTML += `<tr>
+                        <td>${patient.Patient_ID}</td>
+                        <td>${patient.organ_req}</td>
+                        <td>${patient.reason_of_procurement}</td>
+                        <td>${patient.Doctor_ID}</td>
+                        <td>${patient.User_ID}</td>
+                    </tr>`;
+                });
+            });
+
+        // Fetch Transactions
+        fetch('/transactions')
+            .then(response => response.json())
+            .then(data => {
+                const transactionList = document.getElementById('transaction-list');
+                data.forEach(transaction => {
+                    transactionList.innerHTML += `<tr>
+                        <td>${transaction.Patient_ID}</td>
+                        <td>${transaction.Organ_ID}</td>
+                        <td>${transaction.Donor_ID}</td>
+                        <td>${transaction.Date_of_transaction}</td>
+                        <td>${transaction.Status}</td>
+                    </tr>`;
+                });
+            });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
